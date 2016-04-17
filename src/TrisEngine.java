@@ -54,6 +54,25 @@ public class TrisEngine {
             }
         }
 
+        // diagonal check
+        CellType[] diagonal = {
+            trisBoard[0][0],
+            trisBoard[1][1],
+            trisBoard[2][2]
+        };
+        if (allEqualElements(diagonal)) {
+            return diagonal[0];
+        }
+
+        CellType[] _diagonal = {
+            trisBoard[0][2],
+            trisBoard[1][1],
+            trisBoard[2][0]
+        };
+        if (allEqualElements(_diagonal)) {
+            return _diagonal[0];
+        }
+
         return CellType.EMPTY;
     }
 

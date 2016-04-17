@@ -80,16 +80,19 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
 
                 Rectangle rect = new Rectangle(x, y, cell.width, cell.height);
                 if (rect.contains(e.getPoint())) {
-                    trisEngine.setCell(row, column, trisEngine.turn);
+                    if (trisEngine.getCell(row, column) == TrisEngine.CellType.EMPTY) {
+                        
+                        trisEngine.setCell(row, column, trisEngine.turn);
 
-                    // check if someone has won
-                    TrisEngine.CellType t = trisEngine.checkBoard();
-                    if (t != TrisEngine.CellType.EMPTY) {
-                        System.out.println(t.toString() + " Won!");
-                        System.exit(0);
+                        // check if someone has won
+                        TrisEngine.CellType t = trisEngine.checkBoard();
+                        if (t != TrisEngine.CellType.EMPTY) {
+                            System.out.println(t.toString() + " Won!");
+                            System.exit(0);
+                        }
+
+                        trisEngine.nextTurn();
                     }
-
-                    trisEngine.nextTurn();
                 }
             }
         }
