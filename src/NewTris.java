@@ -39,8 +39,11 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
 
         for (int column = 0; column < 3; column++) {
             for (int row = 0; row < 3; row++) {
-                int x = row * cell.width + GRID_BORDERS;
-                int y = column * cell.height + GRID_BORDERS*2;
+                int offsetX = (window.width - cell.width*3 - GRID_BORDERS*2) / 2;
+                int x = row * cell.width + GRID_BORDERS + offsetX;
+
+                int offsetY = (window.height - cell.height*3 - GRID_BORDERS*3) / 2;
+                int y = column * cell.height + GRID_BORDERS*2 + offsetY;
 
                 // highlight selected cell
                 Rectangle rect = new Rectangle(x, y, cell.width, cell.height);
@@ -81,7 +84,7 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
                 Rectangle rect = new Rectangle(x, y, cell.width, cell.height);
                 if (rect.contains(e.getPoint())) {
                     if (trisEngine.getCell(row, column) == TrisEngine.CellType.EMPTY) {
-                        
+
                         trisEngine.setCell(row, column, trisEngine.turn);
 
                         // check if someone has won
