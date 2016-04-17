@@ -27,10 +27,10 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
     public void paint(Graphics g) {
         window = new Dimension(this.getWidth(), this.getHeight());
 
-        int cellSideLenght = (window.width > window.height) ? window.height : window.width;
+        int shorterWindowSide = (window.width > window.height) ? window.height : window.width;
         cell = new Dimension(
-            (cellSideLenght - GRID_BORDERS*2) / 3,
-            (cellSideLenght - GRID_BORDERS*2) / 3
+            (shorterWindowSide - GRID_BORDERS*2) / 3,
+            (shorterWindowSide - GRID_BORDERS*2) / 3
         );
 
         // Clear the window
@@ -42,10 +42,20 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
                 int x = row * cell.width + GRID_BORDERS;
                 int y = column * cell.height + GRID_BORDERS*2;
 
+                // highlight selected cell
                 Rectangle rect = new Rectangle(x, y, cell.width, cell.height);
                 if (rect.contains(mousePos)) {
                     g.setColor(Color.red);
                     g.fillRect(x, y, cell.width, cell.height);
+                }
+
+                // draw cell type
+                if (trisEngine.getCell(row, column) == TrisEngine.CellType.CIRCLE) {
+                    g.setColor(Color.blue);
+                    g.fillRect(x +10, y +10, cell.width -20, cell.height-20);
+                } else if (trisEngine.getCell(row, column) == TrisEngine.CellType.CROSS) {
+                    g.setColor(Color.green);
+                    g.fillRect(x +10, y +10, cell.width -20, cell.height-20);
                 }
 
                 g.setColor(Color.black);
@@ -70,8 +80,16 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
 
                 Rectangle rect = new Rectangle(x, y, cell.width, cell.height);
                 if (rect.contains(e.getPoint())) {
-                    trisEngine.setCellState(row, column, trisEngine.turn);
-                    trisEngine.checkBoard();
+                    trisEngine.setCell(row, column, trisEngine.turn);
+
+                    // check if someone has won
+                    TrisEngine.CellType t = trisEngine.checkBoard();
+                    if (t != TrisEngine.CellType.EMPTY) {
+                        System.out.println(t.toString() + " Won!");
+                        System.exit(0);
+                    }
+
+                    trisEngine.nextTurn();
                 }
             }
         }
