@@ -20,6 +20,7 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        this.setSize(new Dimension(500, 500));
 
         this.trisEngine = new TrisEngine();
     }
@@ -55,10 +56,17 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
                 // draw cell type
                 if (trisEngine.getCell(row, column) == TrisEngine.CellType.CIRCLE) {
                     g.setColor(Color.blue);
-                    g.fillRect(x +10, y +10, cell.width -20, cell.height-20);
+                    g.fillRect(x +cell.width/12, y +cell.height/12,
+                        cell.width -cell.width/12*2,
+                        cell.height-cell.height/12*2
+                    );
+
                 } else if (trisEngine.getCell(row, column) == TrisEngine.CellType.CROSS) {
                     g.setColor(Color.green);
-                    g.fillRect(x +10, y +10, cell.width -20, cell.height-20);
+                    g.fillRect(x +cell.width/12, y +cell.height/12,
+                        cell.width -cell.width/12*2,
+                        cell.height-cell.height/12*2
+                    );
                 }
 
                 g.setColor(Color.black);
@@ -74,12 +82,15 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
         repaint();
     }
 
-    public void mouseClicked(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {
         // find which cell has been pressed
         for (int column = 0; column < 3; column++) {
             for (int row = 0; row < 3; row++) {
-                int x = row * cell.width + GRID_BORDERS;
-                int y = column * cell.height + GRID_BORDERS*2;
+                int offsetX = (window.width - cell.width*3 - GRID_BORDERS*2) / 2;
+                int x = row * cell.width + GRID_BORDERS + offsetX;
+
+                int offsetY = (window.height - cell.height*3 - GRID_BORDERS*3) / 2;
+                int y = column * cell.height + GRID_BORDERS*2 + offsetY;
 
                 Rectangle rect = new Rectangle(x, y, cell.width, cell.height);
                 if (rect.contains(e.getPoint())) {
@@ -103,7 +114,7 @@ public class NewTris extends JFrame implements MouseListener, MouseMotionListene
 
     // Unused Implemented Methods
     public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mouseDragged(MouseEvent e) {}
